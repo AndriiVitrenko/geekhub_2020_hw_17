@@ -1,21 +1,21 @@
-import {fetchCleared} from "../dataBase/todoListSlice";
-import {useDispatch, useSelector} from "react-redux";
-import {useCallback} from 'react';
-import {NavLink} from "react-router-dom";
-import {IState} from '../interfaces';   
+import { useCallback, FC } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { fetchCleared } from '../../api/actions';
+import { IState } from '../../interfaces';
 
-export function Footer() {
-    const dispatch = useDispatch()
-    const listLength = useSelector((state: IState) => state.list.length)
-    const doneTodosAmount = useSelector((state: IState) => state.list.filter(item => item.isDone).length)
+export const Footer: FC = () => {
+    const dispatch = useDispatch();
+    const listLength = useSelector((state: IState) => state.list.length);
+    const doneTodosAmount = useSelector((state: IState) => state.list.filter(item => item.isDone).length);
 
     const clearHandler = useCallback(
         () => {
-            dispatch(fetchCleared())
+            dispatch(fetchCleared());
         }
-    , [dispatch])
+    , [ dispatch ])
 
-    return(
+    return (
         <footer className="footer">
             <span className="todo-count"><strong>{listLength - doneTodosAmount}</strong> item left</span>
             <ul className="filters">
@@ -31,6 +31,5 @@ export function Footer() {
             </ul>
             {doneTodosAmount ? <button className="clear-completed" onClick = {clearHandler}>Clear completed</button> : <></>}
         </footer>
-    )
-
+    );
 }

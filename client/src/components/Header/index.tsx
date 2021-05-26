@@ -1,26 +1,26 @@
-import {useDispatch, useSelector} from "react-redux";
-import {useCallback} from "react";
-import {sendTodo, sendUnSavedText} from "../dataBase/todoListSlice";
-import {IHeaderProps, IState} from '../interfaces';
+import { useCallback, FC } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendTodo, sendUnSavedText } from '../../api/actions';
+import { IHeaderProps, IState } from '../../interfaces';
 
-export function Header({parentState}: IHeaderProps) {
-    const error = useSelector((state: IState) => state.error)
-    const dispatch = useDispatch()
+export const Header: FC<IHeaderProps> = ({parentState}) => {
+    const error = useSelector((state: IState) => state.error);
+    const dispatch = useDispatch();
 
     const keyPressHandler = useCallback((e) => {
         if (e.key === 'Enter' && e.target.value) {
             parentState.isTyping = false;
-            dispatch(sendTodo(e.target.value))
-            e.target.value = ''
+            dispatch(sendTodo(e.target.value));
+            e.target.value = '';
         }
-    }, [dispatch, parentState])
+    }, [ dispatch, parentState ])
 
     const onChangeHandler = useCallback((e) => {
         parentState.isTyping = true;
-        dispatch(sendUnSavedText(e.target.value))
-    }, [dispatch, parentState])
+        dispatch(sendUnSavedText(e.target.value));
+    }, [ dispatch, parentState ]);
 
-    return(
+    return (
         <header className="header">
             <h1>todos</h1>
             {!!error && <p className='error-text'>{error}</p>}
@@ -28,5 +28,5 @@ export function Header({parentState}: IHeaderProps) {
                    autoFocus={!parentState.isEditing}
                    onChange={onChangeHandler} onKeyPress={keyPressHandler}/>
         </header>
-    )
+    );
 }

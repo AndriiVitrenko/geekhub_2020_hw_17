@@ -1,55 +1,55 @@
-import {useDispatch} from "react-redux";
-import {useCallback} from 'react';
-import {useHistory} from 'react-router-dom';
-import {fetchItemState, fetchDeletedItem, fetchEditedItem} from '../dataBase/todoListSlice';
-import {ITodoItemProps} from '../interfaces';
+import { useCallback, FC } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { fetchItemState, fetchDeletedItem, fetchEditedItem } from '../../api/actions';
+import { ITodoItemProps } from '../../interfaces';
 
-export function TodoItem({item, index, isEditing}: ITodoItemProps) {
+export const TodoItem: FC<ITodoItemProps> = ({item, index, isEditing}) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
     const onChangeHandler = useCallback(
         () => {
-            dispatch(fetchItemState(index))
+            dispatch(fetchItemState(index));
         }
-    , [index, dispatch])
+    , [ index, dispatch ])
 
     const deleteHandler = useCallback(
         () => {
-            dispatch(fetchDeletedItem(index))
+            dispatch(fetchDeletedItem(index));
         }
-    , [index, dispatch])
+    , [ index, dispatch ])
 
     const itemChangeHandler = useCallback(
         (event) => {
-            const text = event.target.value
+            const text = event.target.value;
             const body = {
                 index,
                 text,
-            }
-            dispatch(fetchEditedItem(body))
+            };
+            dispatch(fetchEditedItem(body));
         }
-    , [index, dispatch])
+    , [ index, dispatch ])
 
     const onBlurHandler = useCallback(
         () => {
-            history.push(`/:${index}`)
+            history.push(`/:${index}`);
         }
-    , [history, index])
+    , [ history, index ])
 
     const onKeyPressHandler = useCallback(
         (event) => {
             if (event.key === 'Enter') {
-                onBlurHandler()
+                onBlurHandler();
 
                 if (!event.target.value) {
-                    dispatch(fetchDeletedItem(index))
+                    dispatch(fetchDeletedItem(index));
                 }
             }
         }
-    , [onBlurHandler, dispatch, index])
+    , [ onBlurHandler, dispatch, index ])
 
-    return(
+    return (
         <li className={(item.isDone ? 'completed ' : '') + (isEditing ? 'editing ' : '')}>
             <div className='view'>
                 {
@@ -68,5 +68,5 @@ export function TodoItem({item, index, isEditing}: ITodoItemProps) {
                 : <></>
             }
         </li>
-    )
+    );
 }
